@@ -1,9 +1,9 @@
 
 
-Select *
-From PortfolioProject..CovidDeaths
+SELECT *
+FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
-order by 3,4
+ORDER BY 3,4
 
 
 /*
@@ -14,22 +14,22 @@ order by 3,4
 
 -- Select Data that I am going to be using
 
-Select Location, date, total_cases, new_cases, total_deaths, population
-From PortfolioProject..CovidDeaths
-order by 1,2
+SELECT Location, date, total_cases, new_cases, total_deaths, population
+FROM PortfolioProject..CovidDeaths
+ORDER BY 1,2
 
 
 -- Looking at Total Cases vs Total Deaths
 -- Shows Percentage odds of dying if you contract COVID in your country
 
-Select Location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
-From PortfolioProject..CovidDeaths
-where location = 'United States'
-order by 1,2
+SELECT Location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 AS DeathPercentage
+FROM PortfolioProject..CovidDeaths
+WHERE location = 'United States'
+ORDER BY 1,2
 
 -- Shows data types so I can identify what collumn needed to be converted to execute Death Percentage math
-select column_name,data_type 
-from information_schema.columns 
+SELECT column_name,data_type 
+FROM information_schema.columns 
 
 -- total_cases and total_deaths are both nvarchars, I will change them to float
 ALTER TABLE PortfolioProject..CovidDeaths
@@ -42,29 +42,29 @@ ALTER COLUMN total_deaths float;
 -- Looking at Total Cases vs Population
 -- Shows what percentage of Population got covid
 
-Select Location, date, Population, total_cases, (total_cases/population)*100 as ContractionPercentage
-From PortfolioProject..CovidDeaths
+SELECT Location, date, Population, total_cases, (total_cases/population)*100 AS ContractionPercentage
+FROM PortfolioProject..CovidDeaths
 -- where location = 'United States'
-order by 1,2
+ORDER BY 1,2
 
 
 -- Looking at countries with Highest Infection Rate compared to Population
 
-Select Location, Population, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))*100 as ContractionPercentage
-From PortfolioProject..CovidDeaths
+SELECT Location, Population, MAX(total_cases) AS HighestInfectionCount, MAX((total_cases/population))*100 AS ContractionPercentage
+FROM PortfolioProject..CovidDeaths
 -- where location = 'United States'
-Group by Location, population
-order by ContractionPercentage DESC
+GROUP BY Location, population
+ORDER BY ContractionPercentage DESC
 
 
 -- Showing Countries with Highest Death Count per Population
 
-Select Location, MAX(total_deaths) as TotalDeathCount
-From PortfolioProject..CovidDeaths
+SELECT Location, MAX(total_deaths) AS TotalDeathCount
+FROM PortfolioProject..CovidDeaths
 -- where location = 'United States'
 WHERE continent IS NOT NULL
-Group by Location
-order by TotalDeathCount DESC
+GROUP BY Location
+ORDER BY TotalDeathCount DESC
 
 
 -- Showing continents with the highest death count per population
